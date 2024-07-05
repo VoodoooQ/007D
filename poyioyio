@@ -1,0 +1,89 @@
+def test() -> None:
+    """
+        Funcion para probar el archivo
+    """
+    import herramientas
+    menu = herramientas.load_items('menu.csv')
+    print(menu)
+
+# esto es para que test solo corra si es ejecutado directamente
+if __name__ == '__main__':
+    test()
+
+import os
+from herramientas import get_password, check_password, load_items
+
+#guardar el carrito en un archivo
+def guardar_carrito(nombre_usuario, carrito):
+    with open(f"{nombre_usuario}.carrito", "w") as file:
+        for item in carrito:
+            file.write(f"{item['nombre']};{item['precio']};{item['kcal']};{','.join(item['ingredientes'])}\n")
+
+#cargar el carrito de un archivo
+def cargar_carrito(nombre_usuario):
+    carrito = []
+    if os.path.exists(f"{nombre_usuario}.carrito"):
+        with open(f"{nombre_usuario}.carrito", "r") as file:
+            for line in file:
+                valores = line.strip().split(';')
+                carrito.append({
+                    'nombre': valores[0],
+                    'precio': int(valores[1]),
+                    'kcal': float(valores[2]),
+                    'ingredientes': valores[3].split(',')
+                })
+    return carrito
+
+#quitar un ítem del carrito
+def quitar_item_carrito(carrito, item_nombre):
+    for item in carrito:
+        if item['nombre'] == item_nombre:
+            carrito.remove(item)
+            print(f"{item_nombre} ha sido removido del carrito.")
+            break
+    else:
+        print(f"{item_nombre} no se encontró en el carrito.")
+
+#buscar un ítem en el carrito por nombre
+def buscar_item_carrito(carrito, item_nombre):
+    for item in carrito:
+        if item['nombre'] == item_nombre:
+            return item
+    return None
+
+#revisar el menú y agregar items al carrito
+def revisar_menu(menu, carrito):
+    print("\nMenú:")
+    for idx, item in enumerate(menu):
+        print(f"{idx+1}. {item['nombre']} - ${item['precio']}")
+
+    seleccion = int(input("\nSeleccione el número del ítem para agregar al carrito (0 para salir): "))
+    if seleccion > 0 and seleccion <= len(menu):
+        carrito.append(menu[seleccion-1])
+        print(f"\n{menu[seleccion-1]['nombre']} ha sido agregado al carrito.")
+    else:
+        print("\nSelección inválida o salida.")
+
+#revisar el carrito
+def revisar_carrito(carrito):
+    print("\nCarrito:")
+    if not carrito:
+        print("El carrito está vacío.")
+    else:
+        for idx, item in enumerate(carrito):
+            print(f"{idx+1}. {item['nombre']} - ${item['precio']}")
+        print("\nTotal: ${}".format(sum(item['precio'] for item in carrito)))
+
+#pagar el carrito
+def pagar(carrito):
+    total = sum(item['precio'] for item in carrito)
+    propina = total * 0.10
+    print(f"\nTotal a pagar: ${total}")
+    print(f"Sugerencia de propina (10%): ${propina:.2f}")
+
+    opcion = input("\n¿Desea aceptar el pago? (s/n): ").lower()
+    if opcion == 's':
+        print("Pago realizado con éxito. Gracias por su compra.")
+        carrito.clear()
+    else:
+        print("Puede seguir comprando.")
