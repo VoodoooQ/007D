@@ -1,0 +1,53 @@
+# ------ NO BORRAR -----
+from funciones import *
+from herramientas import *
+# ------ NO BORRAR -----
+
+def main():
+    # datos del usuario
+    nombre_usuario = input("Ingrese su nombre: ")
+    comida_favorita = input("Ingrese su comida favorita: ")
+    alergias = input("Ingrese sus alergias (separadas por comas): ").split(',')
+
+    # Cargar menú
+    menu = load_items('menu.csv')
+    carrito = cargar_carrito(nombre_usuario)
+
+    while True:
+        print("\nMenú Principal:")
+        print("1. Revisar Menú")
+        print("2. Revisar Carrito")
+        print("3. Pagar")
+        print("4. Guardar Carrito")
+        print("5. Quitar Ítem del Carrito")
+        print("6. Buscar Ítem en el Carrito")
+        print("0. Salir")
+
+        opcion = int(input("\nSeleccione una opción: "))
+
+        if opcion == 1:
+            revisar_menu(menu, carrito)
+        elif opcion == 2:
+            revisar_carrito(carrito)
+        elif opcion == 3:
+            pagar(carrito)
+        elif opcion == 4:
+            guardar_carrito(nombre_usuario, carrito)
+        elif opcion == 5:
+            item_nombre = input("Ingrese el nombre del ítem a quitar: ")
+            quitar_item_carrito(carrito, item_nombre)
+        elif opcion == 6:
+            item_nombre = input("Ingrese el nombre del ítem a buscar: ")
+            item = buscar_item_carrito(carrito, item_nombre)
+            if item:
+                print(f"Ítem encontrado: {item['nombre']} - ${item['precio']}")
+            else:
+                print(f"{item_nombre} no se encontró en el carrito.")
+        elif opcion == 0:
+            print("Gracias por usar el programa. ¡Hasta luego!")
+            break
+        else:
+            print("Opción inválida. Por favor, intente de nuevo.")
+
+if __name__ == "__main__":
+    main()
