@@ -1,0 +1,59 @@
+from funciones import asignar_sueldos, clasificar_sueldos, ver_estadisticas, generar_reporte
+
+def mostrar_menu():
+    sueldos = {}
+    while True:
+        print("\nMenú de Opciones:")
+        print("1. Asignar sueldos aleatorios")
+        print("2. Clasificar sueldos")
+        print("3. Ver estadísticas")
+        print("4. Generar reporte de sueldos")
+        print("5. Salir del programa")
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == '1':
+            sueldos = asignar_sueldos()
+            print("Sueldos asignados aleatoriamente.")
+        elif opcion == '2':
+            if len(sueldos) == 0:
+                print("Primero debe asignar los sueldos.")
+            else:
+                menores_800k, entre_800k_y_2m, superiores_2m = clasificar_sueldos(sueldos)
+                print("\nSueldos menores a 800.000 TOTAL:", len(menores_800k))
+                for emp in menores_800k:
+                    print(f"{emp[0]}, {emp[1]}, ${emp[2]:,.0f}")
+                print("\nSueldos entre 800.000 y 2.000.000 TOTAL:", len(entre_800k_y_2m))
+                for emp in entre_800k_y_2m:
+                    print(f"{emp[0]}, {emp[1]}, ${emp[2]:,.0f}")
+                print("\nSueldos superiores a 2.000.000 TOTAL:", len(superiores_2m))
+                for emp in superiores_2m:
+                    print(f"{emp[0]}, {emp[1]}, ${emp[2]:,.0f}")
+                total_sueldos = 0
+                for sueldo in sueldos.values():
+                    total_sueldos += sueldo
+                print(f"\nTOTAL SUELDOS: ${total_sueldos:,.0f}")
+        elif opcion == '3':
+            if not sueldos:
+                print("Primero debe asignar los sueldos.")
+            else:
+                sueldo_max, sueldo_min, sueldo_promedio, sueldo_geom = ver_estadisticas(sueldos)
+                print(f"\nSueldo más alto: ${sueldo_max:,.0f}")
+                print(f"Sueldo más bajo: ${sueldo_min:,.0f}")
+                print(f"Promedio de sueldos: ${sueldo_promedio:,.0f}")
+                print(f"Media geométrica de sueldos: ${sueldo_geom:,.0f}")
+        elif opcion == '4':
+            if not sueldos:
+                print("Primero debe asignar los sueldos.")
+            else:
+                generar_reporte(sueldos)
+                print("Reporte de sueldos generado en 'reporte_sueldos.csv'.")
+        elif opcion == '5':
+            print("\nFinalizando programa.....")
+            print("Desarrollado por [Maximiliano Diaz]")
+            print("RUT[20.389.269-1]")
+            break
+        else:
+            print("Opción no válida, intente nuevamente.")
+
+if __name__ == "__main__":
+    mostrar_menu()
