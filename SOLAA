@@ -1,0 +1,127 @@
+import numpy as np 
+import func as fn 
+flag=True
+matriz = np.empty([10,4], dtype=str)
+for i in range(10):
+    for j in range (4):
+        matriz[i,j] = j+1
+##print(matriz)
+while flag:
+    print("Bienvenidos a ventas inmobiliaria CASA FELIZ")
+    elec = int(input("Ingrese el número de la opción: \n\t1)Comprar departamento\n\t2)Mostrar departamentos disponibles\n\t3)Ver listado de compradores\n\t4)Mostrar ganancias totales\n\t5)Salir\n\t"))
+    while elec <1 or elec>5 :
+        elec = int(input("Error al ingresar dato,Ingrese el número de la opción: \n\t1)Ingresar\n\t2)Buscar\n\t3)Imprimir certificados\n\t4)Salir\n\t"))
+    if elec == 1:
+        matriz = fn.comprar(matriz)
+    elif elec==2:
+        fn.mostrar(matriz)
+    elif elec==3:
+        fn.lista()
+    elif elec==4:
+        fn.ganancias()
+    elif elec==5:
+        flag = fn.salir(flag)
+
+func
+import numpy as np
+
+compradores = []
+cantidada = []
+cantidadb = []
+cantidadc = []
+cantidadd = []
+
+def obtener_tipo_departamento():
+    while True:
+        tipo = input("Escoja que tipo de departamento desea, ingrese A,B,C,D: ").upper()
+        if tipo in ["A", "B", "C", "D"]:
+            return tipo
+        else:
+            print("Opción inválida. Intente nuevamente.")
+
+def comprar(matriz):
+    print("Escoja un departamento que desea comprar")
+    print(f"Piso\tTipo\n\t  A    B   C   D\n")
+    
+    for i in range(10):
+        print(10 - i, "\t", matriz[i, :])
+
+    while True:
+        tipo = obtener_tipo_departamento()
+        numtipo = {"A": 0, "B": 1, "C": 2, "D": 3}[tipo]
+        num = int(input("Ingrese el número de piso 1-10: "))
+        
+        while num < 1 or num > 10:
+            num = int(input("Número de piso inválido. Ingrese el número de piso 1-10: "))
+
+        if matriz[10 - num, numtipo] == 'X':
+            print("El departamento no está disponible")
+        else:
+            if int(input(f"¿El departamento {tipo}{num} es correcto? Ingrese 1 para Sí y 2 para No: ")) == 1:
+                precios = {"A": 3800, "B": 3000, "C": 2800, "D": 3500}
+                precio = precios[tipo]
+                if int(input(f"El precio total es de {precio} UF, ¿Desea continuar? Ingrese 1 para Sí y 2 para No: ")) == 1:
+                    rut = input("Ingrese su RUT sin dígito verificador ni puntos (EJ: 12345678): ")
+                    while len(rut) != 8 or not rut.isdigit():
+                        rut = input("RUT inválido. Ingrese su RUT sin dígito verificador ni puntos (EJ: 12345678): ")
+                    
+                    print("Operación REALIZADA con Éxito")
+                    matriz[10 - num, numtipo] = 'X'
+                    compradores.append(rut)
+                    if tipo == "A":
+                        cantidada.append(1)
+                    elif tipo == "B":
+                        cantidadb.append(1)
+                    elif tipo == "C":
+                        cantidadc.append(1)
+                    elif tipo == "D":
+                        cantidadd.append(1)
+                    return matriz
+                else:
+                    print("Operación cancelada.")
+                    return matriz
+
+def mostrar(restantes):
+    print(f"Piso\tTipo\n\t  A    B   C   D\n")
+    for i in range(10):
+        print(10 - i, "\t", restantes[i, :])
+
+def lista():
+    print(compradores)
+
+def ganancias():
+    print("Tipo de Departamento\tCantidad\tTotal")
+    print(f"Tipo A 3800UF\t\t{len(cantidada)}\t{len(cantidada) * 3800} UF")
+    print(f"Tipo B 3000UF\t\t{len(cantidadb)}\t{len(cantidadb) * 3000} UF")
+    print(f"Tipo C 2800UF\t\t{len(cantidadc)}\t{len(cantidadc) * 2800} UF")
+    print(f"Tipo D 3500UF\t\t{len(cantidadd)}\t{len(cantidadd) * 3500} UF")
+    total = (len(cantidada) * 3800) + (len(cantidadb) * 3000) + (len(cantidadc) * 2800) + (len(cantidadd) * 3500)
+    print(f"TOTAL \t\t\t {len(cantidada) + len(cantidadb) + len(cantidadc) + len(cantidadd)} \t {total} UF")
+
+def salir(flag):
+    print("Saliendo del sistema, ¡Adios!")
+    print("Forma B 10/07/2023")
+    return False
+
+# Ejemplo de inicialización de la matriz
+matriz = np.array([[" " for _ in range(4)] for _ in range(10)])
+
+# Para ejecutar las funciones y probar el programa, puedes usar un bucle principal como este:
+if __name__ == "__main__":
+    flag = True
+    while flag:
+        print("\n1. Comprar Departamento\n2. Mostrar Departamentos\n3. Lista de Compradores\n4. Ganancias\n5. Salir")
+        opcion = int(input("Seleccione una opción: "))
+        
+        if opcion == 1:
+            matriz = comprar(matriz)
+        elif opcion == 2:
+            mostrar(matriz)
+        elif opcion == 3:
+            lista()
+        elif opcion == 4:
+            ganancias()
+        elif opcion == 5:
+            flag = salir(flag)
+        else:
+            print("Opción inválida. Intente nuevamente.")
